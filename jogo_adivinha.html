@@ -1,0 +1,77 @@
+<meta charset="UTF-8">
+
+    <h1>Adivinhe o número!!!</h1>
+
+    <label>Insira a quantidade de números a serem gerados (até 10): </label>
+    <input id="qntNumeros"/>
+    <br><br>
+    <label>Insira seu palpite: </label>
+    <input id="numeroDigitado"/>
+    <br><br>
+    <button id="bVerificador">Verificar palpite</button>
+
+<script>
+    
+    var qntNumeros = document.getElementById("qntNumeros");
+
+    var numeroDigitado = document.getElementById("numeroDigitado");
+
+    var bVerificador = document.getElementById("bVerificador");
+
+    var listaNumeros = [];
+
+    function validaCampos() {
+        return (isNaN(parseInt(qntNumeros.value)) 
+                || isNaN(parseInt(numeroDigitado.value))  
+                || numeroDigitado.value < 0
+                || qntNumeros.value > 10 
+                || qntNumeros.value <= 0);
+    }
+
+    function geraNumeroAleatorio () {
+        return Math.round(Math.random() * 10) ;
+    }
+
+    function sorteiaNumeros() {
+        listaNumeros = [];
+
+        var contador = 0;
+
+        do  {
+            var aux = geraNumeroAleatorio();
+
+            if (listaNumeros.includes(aux) == false && aux != 0) {
+                listaNumeros.push(aux);
+                contador++;
+            }
+        } while (contador < qntNumeros.value);
+
+    }
+
+    function verificaNumero() {       
+        for (var i = 0; i < listaNumeros.length; i++) {
+            if (numeroDigitado.value == listaNumeros[i]) {
+                return alert("Você acertou!");
+            } 
+        }
+        
+        return alert("Você errou! Tente novamente.");
+    }
+
+    function valida() {  
+        if (validaCampos()) {
+            alert("Digite um número natural válido de 1 até 10!");
+        } else {
+            sorteiaNumeros();
+            verificaNumero();
+
+            qntNumeros.focus();
+
+            qntNumeros.value = "";
+            numeroDigitado.value = "";
+        }
+    }
+
+    bVerificador.onclick = valida;
+    
+</script>
