@@ -2,16 +2,26 @@
 
     <h1>Adivinhe o número!!!</h1>
 
-    <label>Insira a quantidade de números a serem gerados (até 10): </label>
-    <input id="qntNumeros"/>
+    <p>Insira o intervalo de números a serem gerados:</p>
+    <label>Inicia no número: </label><input id="numeroMinimo"/>
     <br><br>
-    <label>Insira seu palpite: </label>
-    <input id="numeroDigitado"/>
+    <label>Termina no número: </label><input id="numeroMaximo"/>
     <br><br>
-    <button id="bVerificador">Verificar palpite</button>
+    <br>
+    <label>Quantidade de numeros a serem gerados: </label><input id="qntNumeros"/>
+    <br>
+    <br>
+    <p>Informe seu palpite e verifique: </p>
+    <input id="numeroDigitado"/><button id="bVerificador">Verificar palpite</button>
 
 <script>
     
+    var numeroMinimo = document.getElementById("numeroMinimo");
+
+    var numeroMaximo = document.getElementById("numeroMaximo");
+
+    var intervaloNumeros = parseInt(numeroMaximo.value) - parseInt(numeroMinimo.value);
+
     var qntNumeros = document.getElementById("qntNumeros");
 
     var numeroDigitado = document.getElementById("numeroDigitado");
@@ -21,15 +31,26 @@
     var listaNumeros = [];
 
     function validaCampos() {
-        return (isNaN(parseInt(qntNumeros.value)) 
-                || isNaN(parseInt(numeroDigitado.value))  
-                || numeroDigitado.value < 0
-                || qntNumeros.value > 10 
-                || qntNumeros.value <= 0);
+        if (isNaN(parseInt(qntNumeros.value)) 
+            || isNaN(parseInt(numeroDigitado.value))  
+            || isNaN(intervaloNumeros)
+            || parseInt(numeroMinimo.value) <= 0
+            || parseInt(numeroMaximo.value) <= 0
+            || numeroDigitado.value < 0
+            || qntNumeros.value <= 0) {
+                    
+                return alert("Número inválido!");
+        } if (intervaloNumeros <= 0 || qntNumeros.value > intervaloNumeros) {
+            
+                return alert("Intervalo inválido ou quantidade de número maior que intervalo!");
+        } else {
+            return true;
+        }
+            
     }
 
     function geraNumeroAleatorio () {
-        return Math.round(Math.random() * 10) ;
+        return Math.floor(Math.random() * (intervaloNumeros + 1)) + parseInt(numeroMinimo.value);
     }
 
     function sorteiaNumeros() {
@@ -60,13 +81,14 @@
 
     function valida() {  
         if (validaCampos()) {
-            alert("Digite um número natural válido de 1 até 10!");
-        } else {
+
             sorteiaNumeros();
             verificaNumero();
 
-            qntNumeros.focus();
+            numeroMinimo.focus();
 
+            numeroMinimo.value = "";
+            numeroMaximo.value = ""; 
             qntNumeros.value = "";
             numeroDigitado.value = "";
         }
